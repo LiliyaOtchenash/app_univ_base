@@ -29,9 +29,6 @@ if args.courses:
 
 
 
-print(cor)
-
-
 
 
 
