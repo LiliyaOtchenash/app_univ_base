@@ -1,14 +1,15 @@
 from pymongo import MongoClient
+from bson import ObjectId
+
 client = MongoClient()
 db = client.univ_database
 db_teacher_first_name = db.teacher.find({}, {'first_name': 1, '_id': 0})
-db_course_title = db.course.find({}, {'title': 1, '_id': 0})
-
 
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--teachers', '-t', help='list of courses', action='store_true')
 parser.add_argument('--courses', '-c', help='list of courses and teachers', action='store_true')
+parser.add_argument('--student', '-s', help='list of courses, teachers and students', action='store_true')
 
 args = parser.parse_args()
 
@@ -17,36 +18,20 @@ if args.teachers:
     for teacher in list(db_teacher_first_name):
         print(list(teacher.values())[0])
 
-
 if args.courses:
     print('course name', 'teacher name')
-    for course in list(db_course_title):
-        cors = list(course.values()[0]
-        for teacher in list(db_teacher_first_name):
-            print(cors, list(teacher.values())
+    for teacher in db.teacher.find({}):
+        cource = db.course.find_one({'_id': teacher.get('cource_id')})
+        print(cource.get('title'), teacher.get('first_name'))
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#print(list(db.course.find()))
-#print(list(db.teacher.find()))
-#print(list(db.student.find()))
-#db.teacher.find('null', {'first_name': 1, '_id': 0})  не сработало в Python, но работает в mongoShell
-
-
-
+if args.student:
+    print('student name', 'course name', 'teacher name')
+    for student in db.student.find({}):
+        a = student.get('course_id')
+        for code in student.get('course_id'):
+            cource = db.course.find_one({'_id': code})
+            teacher = db.teacher.find_one({'cource_id': cource.get('_id')})
+            print(student.get('name'),'--', cource.get('title'),'--', teacher.get('first_name'))
 
