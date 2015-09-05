@@ -1,13 +1,44 @@
-from pymongo import MongoClient
-client = MongoClient()
-db = client.univ_database
+from flask import Flask, url_for
+
+app = Flask(__name__)
 
 
-for docs in db.collection_course.find():
-    print('list of docs', docs)
 
-print('1', list(db.collection_teachern_.find()))
+import doc_list_flask
+@app.route('/course')
+def hello_world():
+    print('when this is called?')
+    a = []
+    for teacher in list(doc_list_flask.db_teacher_first_name):
+        a.append(list(teacher.values()))
+    return '%s, %s' % ('TEACHER NAMES', a)
 
-print(db.collection_names(include_system_collections=False))
-print(db)
-print(db.collection_student.find_one())
+import doc_list_flask
+@app.route('/teacher')
+def hlello_world():
+    return 'when this is called?'
+
+
+app.debug = True
+
+if __name__ == '__main__':
+    app.run()
+    print('app run called')
+
+
+
+
+
+
+
+
+
+# http://127.0.0.1:5000/
+# http://0.0.0.0:5000/
+import doc_list_flask
+
+print('TEACHER NAME')
+a = []
+for teacher in list(doc_list_flask.db_teacher_first_name):
+    a.append(list(teacher.values()))
+print(a)
