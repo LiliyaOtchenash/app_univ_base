@@ -10,6 +10,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--teachers', '-t', help='list of courses', action='store_true')
 parser.add_argument('--courses', '-c', help='list of courses and teachers', action='store_true')
+parser.add_argument('--courses_new', '-n', help='list of courses and teachers', action='store_true')
+
 parser.add_argument('--students', '-s', help='list of courses, teachers and students', action='store_true')
 parser.add_argument('--add_course', help='adding new course', nargs='*')
 parser.add_argument('--add_teacher', help='adding new teacher', nargs=2)
@@ -32,6 +34,14 @@ if args.courses:
         cource = db.course.find_one({'_id': teacher.get('cource_id')})
         print(cource.get('title'), teacher.get('first_name'))
 
+if args.courses_new:
+    print('course name', 'teacher name')
+    for course in db.course.find({}):
+        cor = db.teacher.find_one({'cource_id': course.get('_id')})
+        if cor:
+            print(course.get('title'), "_", cor.get('first_name'), '_')
+        else:
+            print(course.get('title'), '_no teacher_')
 
 
 if args.students:

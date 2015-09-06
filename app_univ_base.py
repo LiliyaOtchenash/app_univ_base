@@ -1,10 +1,7 @@
 from flask import Flask, url_for
-
 app = Flask(__name__)
-
-
-
 import doc_list_flask
+
 @app.route('/course')
 def hello_world():
     print('when this is called?')
