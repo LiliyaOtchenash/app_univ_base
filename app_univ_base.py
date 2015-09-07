@@ -1,27 +1,40 @@
 from flask import Flask, url_for
 app = Flask(__name__)
-from doc_list_flask import *
+from doc_list import *
 
-@app.route('/course')
-def courses():
+###################################################################
+@app.route('/teachers')
+def teachers():
     a = []
-    for teacher in list(doc_list_flask.db_teacher_first_name):
+    for teacher in list(db_teacher_first_name):
         a.append(list(teacher.values()))
-    return '%s, %s' % ('TEACHER NAMES', a)
-
-@app.route('/courses')
-def coursess():
-    if args.students:
-
-    return '%s, %s' % ('TEACHER NAMES', list(teacher.values())[0])
-
-
-
-import doc_list_flask
-@app.route('/teacher')
-def hlello_world():
-    return 'when this is called?'
-
+    return 'TEACHER NAMES {}'.format(a)
+###################################################################
+@app.route('/cources')
+def cources():
+    cour = []
+    for course in db.course.find({}):
+        cor = db.teacher.find_one({'cource_id': course.get('_id')})
+        if cor:
+            L = (course.get('title'), cor.get('first_name'))
+            cour.append(L)
+        else:
+            K = (course.get('title'), '_no teacher_')
+            cour.append(K)
+    print(len(cour))
+    return ("'course name', 'teacher name' {}".format(cour))
+###################################################################
+@app.route('/students')
+def students():
+    stud = []
+    for student in db.student.find({}):
+        a = student.get('course_id')
+        for code in student.get('course_id'):
+            cource = db.course.find_one({'_id': code})
+            teacher = db.teacher.find_one({'cource_id': cource.get('_id')})
+            S = (student.get('name'), cource.get('title'), teacher.get('first_name'))
+            stud.append(S)
+    return "'student name', 'course name', 'teacher name' {}".format(stud)
 
 
 
@@ -29,22 +42,3 @@ app.debug = True
 
 if __name__ == '__main__':
     app.run()
-    print('app run called')
-
-
-
-
-
-
-
-
-
-# http://127.0.0.1:5000/
-# http://0.0.0.0:5000/
-import doc_list_flask
-
-print('TEACHER NAME')
-a = []
-for teacher in list(doc_list_flask.db_teacher_first_name):
-    a.append(list(teacher.values()))
-print(a)
