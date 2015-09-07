@@ -14,7 +14,8 @@ parser.add_argument('--courses_new', '-n', help='list of courses and teachers', 
 
 parser.add_argument('--students', '-s', help='list of courses, teachers and students', action='store_true')
 parser.add_argument('--add_course', help='adding new course', nargs='*')
-parser.add_argument('--add_teacher', help='adding new teacher', nargs=2)
+parser.add_argument('--add_teacher', help='adding new teacher', nargs='*')
+parser.add_argument('--add_student', help='adding new teacher', nargs='*')
 
 args = parser.parse_args()
 #db.course.insert({'title': 'Python', 'description': 'widely used general-purpose, high-level programming language'})
@@ -28,13 +29,8 @@ if args.teachers:
     for teacher in list(db_teacher_first_name):
         print(list(teacher.values())[0])
 
-if args.courses:
-    print('course name', 'teacher name')
-    for teacher in db.teacher.find({}):
-        cource = db.course.find_one({'_id': teacher.get('cource_id')})
-        print(cource.get('title'), teacher.get('first_name'))
 
-if args.courses_new:
+if args.courses:
     print('course name', 'teacher name')
     for course in db.course.find({}):
         cor = db.teacher.find_one({'cource_id': course.get('_id')})
@@ -43,6 +39,12 @@ if args.courses_new:
         else:
             print(course.get('title'), '_no teacher_')
 
+
+if args.courses_new:
+    print('course name', 'teacher name')
+    for teacher in db.teacher.find({}):
+        cource = db.course.find_one({'_id': teacher.get('cource_id')})
+        print(cource.get('title'), teacher.get('first_name'))
 
 if args.students:
     print('student name', 'course name', 'teacher name')
@@ -61,23 +63,47 @@ if args.add_course:
     if new_course_for_add == None:
         db.course.insert(new_course)
         print('NEW DOCS ADDED', list(db.course.find({})))
-
     else:
         print('such course is already in the collection')
         print('ALL DOCS', list(db.course.find({})))
 
 
-#cource_name = db.course.find_one({'title': args.first_name})
-
 if args.add_teacher:
     new_teacher_str = args.add_teacher[0]
     new_teacher = json.loads(new_teacher_str.replace("'", "\""))
     new_teacher_for_add = db.teacher.find_one({'first_name': new_teacher.get('first_name')})
-    #if new_teacher_for_add == None:
+    if new_teacher_for_add == None:
+        teach_id = ObjectId(new_teacher.get('cource_id'))
+        new_teacher['cource_id'] = teach_id
+        db.teacher.insert(new_teacher)
+        print('NEW teacher ADDED', list(db.teacher.find({})))
+    else:
+        print('such teacher is already in the collection')
+        print('ALL DOCS', list(db.teacher.find({})))
 
-   # new_teacher = {'first_name': args.first_name, 'cource_id': cource_name.get('_id')}
+if args.add_student:
+    new_student_str = args.add_student[0]
+    new_student = json.loads(new_student_str.replace("'", "\""))
+    new_student.get('course_id')
 
-#{ "_id" : ObjectId("55e41a745ac9452058d01754"), "first_name" : "Andrew", "cource_id" : ObjectId("55e41918fe9d5908f16b8e46") }
-#{'title': 'C++', 'description': 'general-purpose programming language'}
+    new_student_for_add = db.student.find_one({'name': new_student.get('name')})
+    stud_id = ObjectId(new_student.get('cource_id'))
+
+
+    if new_student_for_add == None:
+        course_ids = []
+        for st in new_student.get('course_id'):
+            course_ids.append(ObjectId(st))
+        new_student['course_id'] = course_ids
+        db.student.insert(new_student)
+        print('NEW student ADDED', list(db.student.find({})))
+    else:
+        print('such student is already in the collection')
+        print('ALL DOCS', list(db.student.find({})))
+
+
+
+
+
 
 
