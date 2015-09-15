@@ -100,6 +100,7 @@ def add_stud():
 
 
 if __name__ == '__main__':
+    print('21')
     if args.teachers:
         teach()
     elif args.courses:
