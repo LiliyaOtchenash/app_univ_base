@@ -14,6 +14,11 @@ parser.add_argument('--add_course', help='adding new course', nargs='*')
 parser.add_argument('--add_teacher', help='adding new teacher', nargs='*')
 parser.add_argument('--add_student', help='adding new teacher', nargs='*')
 
+
+
+#a@a:~/dev/app_univ_base$
+#--teachers
+
 args = parser.parse_args()
 
 def teach():
@@ -39,15 +44,13 @@ def studen():
             cource = db.course.find_one({'_id': code})
             teacher = db.teacher.find_one({'cource_id': cource.get('_id')})
             print(student.get('name'), '--', cource.get('title'), '--', teacher.get('first_name'))
-            return (student.get('name'), '--', cource.get('title'), '--', teacher.get('first_name'))
+
 
 
 # --add_course="{'title': 'C++', 'description': 'general-purpose programming language'}"
 def add_cour():
     new_course_str = args.add_course[0]
     new_course = json.loads(new_course_str.replace("'", "\""))
-    print(new_course)
-    print(type(new_course))
     if list(sorted(new_course.keys())) == ['description', 'title']:
         new_course_for_add = db.course.find_one({'title': new_course.get('title')})
         if new_course_for_add == None:
@@ -100,7 +103,7 @@ def add_stud():
 
 
 if __name__ == '__main__':
-    print('21')
+
     if args.teachers:
         teach()
     elif args.courses:
@@ -113,6 +116,7 @@ if __name__ == '__main__':
             add_cour()
         except ValueError:
              print('WRONG DATA TYPE, please use next pattern', "{'title': 'C++', 'description': 'general-purpose programming language'}")
+
 
         #if args.add_course[0] == '':
          #   print(' ITS EMPTY STRING Plese write string useing next pattern', ':', "{'title': '......course_name.......', 'description': '....course_description....'}")
@@ -137,3 +141,5 @@ if __name__ == '__main__':
         except ValueError:
             print('WRONG DATA TYPE, please use next pattern', "{'name' : 'Liliya', 'sourname' : 'Otchenash', 'groop' : 1, 'course_id' : ['55e41918fe9d5908f16b8e46', '55e41acb5ac9452058d01755']}")
 
+    else:
+        print('Please, use one of special args')
