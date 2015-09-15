@@ -46,6 +46,8 @@ def studen():
 def add_cour():
     new_course_str = args.add_course[0]
     new_course = json.loads(new_course_str.replace("'", "\""))
+    print(new_course)
+    print(type(new_course))
     if list(sorted(new_course.keys())) == ['description', 'title']:
         new_course_for_add = db.course.find_one({'title': new_course.get('title')})
         if new_course_for_add == None:
@@ -55,9 +57,9 @@ def add_cour():
             print('such course is already in the collection')
             print('ALL DOCS', list(db.course.find({})))
     else:
-        print('Plese write string useing next pattern', ':', "{'title': '......course_name.......', 'description': '....course_description....'}")
+        print('ITS WRONG GROOP OF KEYS Plese write string useing next pattern', ':', "{'title': 'C++', 'description': 'general-purpose programming language'}")
 
-
+# --add_teacher="{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}"
 def add_teach():
     new_teacher_str = args.add_teacher[0]
     new_teacher = json.loads(new_teacher_str.replace("'", "\""))
@@ -72,9 +74,9 @@ def add_teach():
             print('such teacher is already in the collection')
             print('ALL DOCS', list(db.teacher.find({})))
     else:
-        print('Plese write string useing next pattern', ':', "{'first_name': '......teacher_name.......', 'cource_id': '....course_id....'}")
+        print('Plese write string useing next pattern', ':', "{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}")
 
-
+#--add_student="{'name' : 'Liliya', 'sourname' : 'Otchenash', 'groop' : 1, 'course_id' : ['55e41918fe9d5908f16b8e46', '55e41acb5ac9452058d01755']}"
 def add_stud():
     new_student_str = args.add_student[0]
     new_student = json.loads(new_student_str.replace("'", "\""))
@@ -106,23 +108,31 @@ if __name__ == '__main__':
         studen()
 
     elif args.add_course:
-        #if args.add_course == None:
-       #     print('Plese write string useing next pattern', ':', "{'title': '......course_name.......', 'description': '....course_description....'}")
-        #else:
+        try:
             add_cour()
+        except ValueError:
+             print('WRONG DATA TYPE, please use next pattern', "{'title': 'C++', 'description': 'general-purpose programming language'}")
+
+        #if args.add_course[0] == '':
+         #   print(' ITS EMPTY STRING Plese write string useing next pattern', ':', "{'title': '......course_name.......', 'description': '....course_description....'}")
+        #else:
+         #   new_course_str = args.add_course[0]
+          #  new_course = json.loads(new_course_str.replace("'", "\""))
+           # if type(new_course) != type({}):
+            #    print(' ITS NOT DICT Plese write string useing next pattern')
+            #else:
+             #   add_cour()
 
     elif args.add_teacher:
-        add_teach()
+        try:
+            add_teach()
+        except ValueError:
+            print('WRONG DATA TYPE, please use next pattern', "{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}")
+
 
     elif args.add_student:
-        add_stud()
+        try:
+            add_stud()
+        except ValueError:
+            print('WRONG DATA TYPE, please use next pattern', "{'name' : 'Liliya', 'sourname' : 'Otchenash', 'groop' : 1, 'course_id' : ['55e41918fe9d5908f16b8e46', '55e41acb5ac9452058d01755']}")
 
-
-
-# python3 doc_list.py --add_student="{'name': '', 'sourname': '', 'groop': , 'course_id': []}"
-# --add_teacher="{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}"
-
-#--add_teacher = "{'title': 'new_cource'}"
-#--add_course = ''
-
-# вопрос - если аргусент не передан или передан неправильный аргумент как обработать такие ситуации

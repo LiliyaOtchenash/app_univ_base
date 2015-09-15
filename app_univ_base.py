@@ -1,5 +1,7 @@
 from flask import Flask, url_for
+import jinja2
 from doc_list_flask import db_teacher_first_name
+
 app = Flask(__name__)
 from doc_list import *
 
@@ -10,6 +12,8 @@ def teachers():
     for teacher in list(db_teacher_first_name):
         a.append(list(teacher.values()))
     return 'TEACHER NAMES {}'.format(a)
+
+
 ###################################################################
 @app.route('/cources')
 def cources():
@@ -24,6 +28,8 @@ def cources():
             cour.append(K)
     print(len(cour))
     return ("'course name', 'teacher name' {}".format(cour))
+
+
 ###################################################################
 @app.route('/students')
 def students():
@@ -36,6 +42,16 @@ def students():
             S = (student.get('name'), cource.get('title'), teacher.get('first_name'))
             stud.append(S)
     return "'student name', 'course name', 'teacher name' {}".format(stud)
+
+
+
+templateLoader = jinja2.FileSystemLoader(searchpath="/")
+templateEnv = jinja2.Environment(loader=templateLoader)
+TEMPLATE_FILE = "/home/user/site/example1.jinja"
+template = templateEnv.get_template( TEMPLATE_FILE )
+templateVars = { "title" : "Test Example",
+                 "description" : "A simple inquiry of function." }
+outputText = template.render( templateVars )
 
 
 
