@@ -1,3 +1,4 @@
+# commit for #2
 from pymongo import MongoClient
 from bson import ObjectId
 import json
@@ -50,7 +51,7 @@ def add_cour():
     new_course_str = args.add_course[0]
     new_course = json.loads(new_course_str.replace("'", "\""))
     if list(sorted(new_course.keys())) == ['description', 'title']:
-        new_course_for_add = db.course.find_one({'title': new_course.get('title')})
+        new_course_for_add = db.course.find_one({'title': new_course.get('title')}) # ключ уникальности курса - title
         if new_course_for_add == None:
             db.course.insert(new_course)
             print('NEW DOCS ADDED')# list(db.course.find({})))
@@ -135,7 +136,7 @@ if __name__ == '__main__':
         try:
             add_stud()
         except ValueError:
-            print('WRONG DATA TYPE, please use next pattern', "{'name' : 'Liliya', 'sourname' : 'Otchenash', 'groop' : 1, 'course_id' : ['55e41918fe9d5908f16b8e46', '55e41acb5ac9452058d01755']}")
+            print('WRONG DATA TYPE, use next pattern', "{'name' : 'Liliya', 'sourname' : 'Otchenash', 'groop' : 1, 'course_id' : ['55e41918fe9d5908f16b8e46', '55e41acb5ac9452058d01755']}")
 
     else:
         print('Please, use one of special args')

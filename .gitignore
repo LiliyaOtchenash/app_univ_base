@@ -1,3 +1,6 @@
 .idea
 *.py~
 *.py[cd]
+*.html
+*.hyml~
+.templates
