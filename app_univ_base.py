@@ -1,22 +1,24 @@
-from flask import Flask, url_for
+from flask import Flask
+from doc_list import db_teacher_first_name
+from flask import render_template
 import jinja2
-from doc_list_flask import db_teacher_first_name
-
-app = Flask(__name__)
+ap = Flask(__name__)
 from doc_list import *
-
+ap.debug = True
 ###################################################################
-@app.route('/teachers')
-def teachers():
-    a = []
-    for teacher in list(db_teacher_first_name):
-        a.append(list(teacher.values()))
-    return 'TEACHER NAMES {}'.format(a)
-
-
+@ap.route('/teachers_list')
+def teacher_list():
+    user = {'hat_of_table': 'TEACHER NAMES'}
+    posts = list(db_teacher_first_name)
+    return render_template('teachers.html',
+                           title = 'teachers',
+                           user = user,
+                           posts = posts)
 ###################################################################
-@app.route('/cources')
+@ap.route('/cources')
 def cources():
+    title = 'cources'
+    user = {'hat_of_table': 'Course Name, Teacher Name'}
     cour = []
     for course in db.course.find({}):
         cor = db.teacher.find_one({'cource_id': course.get('_id')})
@@ -26,13 +28,18 @@ def cources():
         else:
             K = (course.get('title'), '_no teacher_')
             cour.append(K)
-    print(len(cour))
-    return ("'course name', 'teacher name' {}".format(cour))
+    #print(len(cour))
+    return render_template('cources.html',
+                           title = title,
+                           user = user,
+                           cour = cour)
 
 
 ###################################################################
-@app.route('/students')
+@ap.route('/students')
 def students():
+    title = 'students'
+    user = {'hat_of_table': 'Student Name, Course Name, Teacher Name'}
     stud = []
     for student in db.student.find({}):
         a = student.get('course_id')
@@ -41,21 +48,25 @@ def students():
             teacher = db.teacher.find_one({'cource_id': cource.get('_id')})
             S = (student.get('name'), cource.get('title'), teacher.get('first_name'))
             stud.append(S)
-    return "'student name', 'course name', 'teacher name' {}".format(stud)
+    return render_template('students.html',
+                           title = title,
+                           user = user,
+                           stud = stud)
 
 
 
-templateLoader = jinja2.FileSystemLoader(searchpath="/")
-templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = "/home/user/site/example1.jinja"
-template = templateEnv.get_template( TEMPLATE_FILE )
-templateVars = { "title" : "Test Example",
-                 "description" : "A simple inquiry of function." }
-outputText = template.render( templateVars )
 
-
-
-app.debug = True
 
 if __name__ == '__main__':
-    app.run()
+    ap.run()
+
+
+
+
+###################################################################
+#@app.route('/teachers')
+#def teachers():
+ #   a = []
+  #  for teacher in list(db_teacher_first_name):
+   #     a.append(list(teacher.values()))
+    #return 'TEACHER NAMES {}'.format(a)

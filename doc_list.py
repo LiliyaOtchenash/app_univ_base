@@ -20,7 +20,7 @@ parser.add_argument('--add_student', help='adding new teacher', nargs='*')
 #--teachers
 
 args = parser.parse_args()
-
+db_teacher_first_name = db.teacher.find({}, {'first_name': 1, '_id': 0})
 def teach():
     print('TEACHER NAME')
     db_teacher_first_name = db.teacher.find({}, {'first_name': 1, '_id': 0})
@@ -70,9 +70,13 @@ def add_teach():
         new_teacher_for_add = db.teacher.find_one({'first_name': new_teacher.get('first_name')})
         if new_teacher_for_add == None:
             teach_id = ObjectId(new_teacher.get('cource_id'))
-            new_teacher['cource_id'] = teach_id
-            db.teacher.insert(new_teacher)
-            print('NEW teacher ADDED', list(db.teacher.find({})))
+            teach_id_is = db.course.find_one({'_id': teach_id})
+            if teach_id_is:
+                new_teacher['cource_id'] = teach_id
+                db.teacher.insert(new_teacher)
+                print('NEW teacher ADDED', list(db.teacher.find({})))
+            else:
+                print('we don`t have such course')
         else:
             print('such teacher is already in the collection')
             print('ALL DOCS', list(db.teacher.find({})))
@@ -85,19 +89,24 @@ def add_stud():
     new_student = json.loads(new_student_str.replace("'", "\""))
     list(sorted(new_student.keys()))
     if list(sorted(new_student.keys())) == ['course_id', 'groop', 'name', 'sourname']:
-        new_student.get('course_id')
-        new_student_for_add = db.student.find_one({'name': new_student.get('name')})
-        stud_id = ObjectId(new_student.get('cource_id'))
+        #new_student.get('course_id')
+        new_student_for_add = db.student.find_one({'name': new_student.get('name')}) #  ключ уникальности студента -  его имя
         if new_student_for_add == None:
             course_ids = []
             for st in new_student.get('course_id'):
-                course_ids.append(ObjectId(st))
-            new_student['course_id'] = course_ids
-            db.student.insert(new_student)
-            print('NEW student ADDED', list(db.student.find({})))
+                if db.course.find_one({'_id': ObjectId(st)}):
+                    course_ids.append(ObjectId(st))
+                else:
+                    print('We do not have such course', st,  'yet')
+            if course_ids != []:
+                new_student['course_id'] = course_ids
+                db.student.insert(new_student)
+                print('NEW student ADDED', list(db.student.find({})))
+            else:
+                print('We can`t add this student, because he don`t visit any course')
         else:
             print('such student is already in the collection')
-            print('ALL DOCS', list(db.student.find({})))
+            #print('ALL DOCS', list(db.student.find({})))
     else:
         print('Plese write string useing next pattern', "{'name': '......', 'sourname': '........', 'groop': .... , 'course_id': [........]}")
 
