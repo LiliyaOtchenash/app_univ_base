@@ -1,0 +1,15 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{title}}</title>
+    {% else %}
+    <title>university</title>
+    {% endif %}
+  </head>
+  <body>
+    <h4>{{user.hat_of_table}}:</h4>
+    {% for cor in cour %}
+    <p>{{cor}}</p>
+    {% endfor %}
+  </body>
+</html>

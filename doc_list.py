@@ -25,6 +25,7 @@ def teach():
     for teacher in list(db_teacher_first_name):
         print('TEACHER NAME', list(teacher.values())[0])
 
+
 def cours():
     print('course name', 'teacher name')
     for course in db.course.find({}):
@@ -43,7 +44,7 @@ def studen():
             print(student.get('name'), '--', cource.get('title'), '--', teacher.get('first_name'))
 
 
-
+#
 # --add_course="{'title': 'C++', 'description': 'general-purpose programming language'}"
 def add_cour():
     new_course_str = args.add_course[0]
@@ -52,7 +53,7 @@ def add_cour():
         new_course_for_add = db.course.find_one({'title': new_course.get('title')})
         if new_course_for_add == None:
             db.course.insert(new_course)
-            print('NEW DOCS ADDED', list(db.course.find({})))
+            print('NEW DOCS ADDED')# list(db.course.find({})))
         else:
             print('such course is already in the collection')
             #print('ALL DOCS', list(db.course.find({})))
