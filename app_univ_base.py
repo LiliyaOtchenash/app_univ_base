@@ -6,7 +6,7 @@ ap = Flask(__name__)
 from doc_list import *
 ap.debug = True
 ###################################################################
-@ap.route('/teachers_list')
+@ap.route('/teachers')
 def teacher_list():
     user = {'hat_of_table': 'TEACHER NAMES'}
     posts = list(db_teacher_first_name)
