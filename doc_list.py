@@ -15,17 +15,15 @@ parser.add_argument('--add_teacher', help='adding new teacher', nargs='*')
 parser.add_argument('--add_student', help='adding new teacher', nargs='*')
 
 
-
 #a@a:~/dev/app_univ_base$
 #--teachers
 
 args = parser.parse_args()
 db_teacher_first_name = db.teacher.find({}, {'first_name': 1, '_id': 0})
 def teach():
-    print('TEACHER NAME')
     db_teacher_first_name = db.teacher.find({}, {'first_name': 1, '_id': 0})
     for teacher in list(db_teacher_first_name):
-        print(list(teacher.values())[0])
+        print('TEACHER NAME', list(teacher.values())[0])
 
 def cours():
     print('course name', 'teacher name')
@@ -39,7 +37,6 @@ def cours():
 def studen():
     print('student name', 'course name', 'teacher name')
     for student in db.student.find({}):
-        a = student.get('course_id')
         for code in student.get('course_id'):
             cource = db.course.find_one({'_id': code})
             teacher = db.teacher.find_one({'cource_id': cource.get('_id')})
@@ -58,9 +55,9 @@ def add_cour():
             print('NEW DOCS ADDED', list(db.course.find({})))
         else:
             print('such course is already in the collection')
-            print('ALL DOCS', list(db.course.find({})))
+            #print('ALL DOCS', list(db.course.find({})))
     else:
-        print('ITS WRONG GROOP OF KEYS Plese write string useing next pattern', ':', "{'title': 'C++', 'description': 'general-purpose programming language'}")
+        print('ITS WRONG GROOP OF KEYS, Plese write string useing next pattern', ':', "{'title': 'C++', 'description': 'general-purpose programming language'}")
 
 # --add_teacher="{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}"
 def add_teach():
@@ -79,7 +76,7 @@ def add_teach():
                 print('we don`t have such course')
         else:
             print('such teacher is already in the collection')
-            print('ALL DOCS', list(db.teacher.find({})))
+            #print('ALL DOCS', list(db.teacher.find({})))
     else:
         print('Plese write string useing next pattern', ':', "{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}")
 
@@ -125,17 +122,6 @@ if __name__ == '__main__':
             add_cour()
         except ValueError:
              print('WRONG DATA TYPE, please use next pattern', "{'title': 'C++', 'description': 'general-purpose programming language'}")
-
-
-        #if args.add_course[0] == '':
-         #   print(' ITS EMPTY STRING Plese write string useing next pattern', ':', "{'title': '......course_name.......', 'description': '....course_description....'}")
-        #else:
-         #   new_course_str = args.add_course[0]
-          #  new_course = json.loads(new_course_str.replace("'", "\""))
-           # if type(new_course) != type({}):
-            #    print(' ITS NOT DICT Plese write string useing next pattern')
-            #else:
-             #   add_cour()
 
     elif args.add_teacher:
         try:
