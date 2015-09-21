@@ -71,7 +71,7 @@ def add_teach():
             if teach_id_is:
                 new_teacher['cource_id'] = teach_id
                 db.teacher.insert(new_teacher)
-                print('NEW teacher ADDED', list(db.teacher.find({})))
+                print('NEW teacher ADDED')
             else:
                 print('we don`t have such course')
         else:
@@ -98,9 +98,9 @@ def add_stud():
             if course_ids != []:
                 new_student['course_id'] = course_ids
                 db.student.insert(new_student)
-                print('NEW student ADDED', list(db.student.find({})))
+                print('NEW student ADDED')
             else:
-                print('We can`t add this student, because he don`t visit any course')
+                print('We can`t add this student, because he doesn`t visit any course')
         else:
             print('such student is already in the collection')
             #print('ALL DOCS', list(db.student.find({})))
