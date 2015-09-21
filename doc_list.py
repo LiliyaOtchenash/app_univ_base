@@ -78,7 +78,7 @@ def add_teach():
             print('such teacher is already in the collection')
             #print('ALL DOCS', list(db.teacher.find({})))
     else:
-        print('Plese write string useing next pattern', ':', "{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}")
+        print('Please write string using next pattern', ':', "{'first_name': 'Fil', 'cource_id': '55e5b4c40cc17563d0f1c6a7'}")
 
 #--add_student="{'name' : 'Liliya', 'sourname' : 'Otchenash', 'groop' : 1, 'course_id' : ['55e41918fe9d5908f16b8e46', '55e41acb5ac9452058d01755']}"
 def add_stud():
