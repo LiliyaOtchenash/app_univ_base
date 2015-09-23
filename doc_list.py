@@ -1,4 +1,3 @@
-# commit for #2
 from pymongo import MongoClient
 from bson import ObjectId
 import json
@@ -32,9 +31,9 @@ def cours():
     for course in db.course.find({}):
         cor = db.teacher.find_one({'cource_id': course.get('_id')})
         if cor:
-            print(course.get('title'), "_", cor.get('first_name'), '_')
+            print(course.get('title'), "_ cource_id: ", course.get('_id'), '_', cor.get('first_name'), '_')
         else:
-            print(course.get('title'), '_no teacher_')
+            print(course.get('title'),  "_ cource_id: ", course.get('_id'), '_no teacher_')
 
 def studen():
     print('student name', 'course name', 'teacher name')
@@ -126,6 +125,8 @@ if __name__ == '__main__':
              print('WRONG DATA TYPE, please use next pattern', "{'title': 'C++', 'description': 'general-purpose programming language'}")
 
     elif args.add_teacher:
+        #for cour_id in list(db.course.find({}, {'_id': 1, 'title': 1})):
+         #   print(list(cour_id.values()))
         try:
             add_teach()
         except ValueError:
