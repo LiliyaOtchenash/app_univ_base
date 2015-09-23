@@ -23,10 +23,10 @@ def cources():
     for course in db.course.find({}):
         cor = db.teacher.find_one({'cource_id': course.get('_id')})
         if cor:
-            L = (course.get('title'), cor.get('first_name'))
+            L = (course.get('title'), course.get('_id'), cor.get('first_name'))
             cour.append(L)
         else:
-            K = (course.get('title'), '_no teacher_')
+            K = (course.get('title'),  course.get('_id'), '_no teacher_')
             cour.append(K)
     #print(len(cour))
     return render_template('cources.html',
